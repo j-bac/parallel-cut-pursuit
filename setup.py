@@ -24,7 +24,7 @@ to_compile = [ # comment undesired extension modules
 ]
 include_dirs = [numpy.get_include(), # find the Numpy headers
                 "./include"]
-                
+
 # compilation and linkage options
 # _GLIBCXX_PARALLEL is only useful for libstdc++ users
 # MIN_OPS_PER_THREAD roughly controls parallelization, see doc in README.md
@@ -39,9 +39,9 @@ elif platform.system() == 'Linux': # linux
     extra_link_args = ["-lgomp"]
 
 elif platform.system() == 'Darwin': # Mac
-    extra_compile_args = ["-std=c++11", "-Xpreprocessor", "-fopenmp", "-D_GLIBCXX_PARALLEL",
+    extra_compile_args = ["-std=c++11", "-Xclang", "-fopenmp", "-D_GLIBCXX_PARALLEL",
                           "-DMIN_OPS_PER_THREAD=10000"]
-    extra_link_args = ["-lgomp"]
+    extra_link_args = ["-lomp"]
 else:
     raise NotImplementedError('OS not yet supported.')
 
