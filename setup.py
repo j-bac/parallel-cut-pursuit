@@ -1,13 +1,13 @@
    #----------------------------------------------------------------------#
-   #  distutils setup script for compiling cut-pursuit python extensions  #
+   #  distutils #setup script for compiling cut-pursuit python extensions  #
    #----------------------------------------------------------------------#
 """ 
-Compilation command: python setup.py build_ext
+Compilation command: python #setup.py build_ext
 
 Camille Baudoin 2019
 """
 
-from setuptools import setup, Extension
+from setuptools import setup, find_packages, Extension
 from distutils.command.build import build
 import numpy
 import shutil # for rmtree, os.rmdir can only remove _empty_ directory
@@ -63,10 +63,10 @@ for shared_obj in to_compile:
     purge("bin/", shared_obj)
 
 ###  compilation  ###
-
+mods = []
 name = "cp_pfdr_d1_ql1b_cpy"
 if name in to_compile:
-    mod = Extension(
+    mods.append( Extension(
             name,
             # list source files
             ["cpython/cp_pfdr_d1_ql1b_cpy.cpp", "./src/cp_pfdr_d1_ql1b.cpp",
@@ -76,13 +76,13 @@ if name in to_compile:
              "./src/pcd_fwd_doug_rach.cpp", "./src/pcd_prox_split.cpp"],
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
-            extra_link_args=extra_link_args)
-    setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
+            extra_link_args=extra_link_args))
+    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_pfdr_d1_lsx_cpy"
 if name in to_compile:
-    mod = Extension(
+    mods.append( Extension(
             name,
             # list source files
             ["cpython/cp_pfdr_d1_lsx_cpy.cpp", "./src/cp_pfdr_d1_lsx.cpp",
@@ -92,13 +92,13 @@ if name in to_compile:
              "./src/pcd_fwd_doug_rach.cpp", "./src/pcd_prox_split.cpp"], 
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
-            extra_link_args=extra_link_args)
-    setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
+            extra_link_args=extra_link_args))
+    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_kmpp_d0_dist_cpy"
 if name in to_compile:
-    mod = Extension(
+    mods.append( Extension(
             name,
             # list source files
             ["cpython/cp_kmpp_d0_dist_cpy.cpp", "./src/cp_kmpp_d0_dist.cpp",
@@ -106,13 +106,13 @@ if name in to_compile:
              "./src/maxflow.cpp"], 
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
-            extra_link_args=extra_link_args)
-    setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
+            extra_link_args=extra_link_args))
+    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_prox_tv_cpy"
 if name in to_compile:
-    mod = Extension(
+    mods.append( Extension(
             name,
             # list source files
             ["cpython/cp_prox_tv_cpy.cpp", "./src/cp_prox_tv.cpp",
@@ -122,10 +122,10 @@ if name in to_compile:
              "./src/pcd_prox_split.cpp", "./src/matrix_tools.cpp"],
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
-            extra_link_args=extra_link_args)
-    setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
+            extra_link_args=extra_link_args))
+    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
-
+setup(name='cutpursuit', ext_modules=mods,packages=find_packages(),cmdclass=dict(build=build_class))
 ###  postprocessing  ###
 try:
     shutil.rmtree("build") # remove temporary compilation products
