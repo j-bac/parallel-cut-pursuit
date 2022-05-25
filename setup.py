@@ -7,8 +7,8 @@ Compilation command: python #setup.py build_ext
 Camille Baudoin 2019
 """
 
-from setuptools import setup, find_packages, Extension
-from distutils.command.build import build
+from setuptools import setup, dist, find_packages, Extension
+dist.Distribution().fetch_build_eggs(['numpy>=1.10'])
 import numpy
 import shutil # for rmtree, os.rmdir can only remove _empty_ directory
 import os 
