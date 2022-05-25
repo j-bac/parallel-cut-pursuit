@@ -37,13 +37,6 @@ elif os.name == 'posix': # linux
 else:
     raise NotImplementedError('OS not yet supported.')
 
-###  auxiliary functions  ###
-class build_class(build):
-    def initialize_options(self):
-        build.initialize_options(self)
-        self.build_lib = "bin" 
-    def run(self):
-        build_path = self.build_lib
 
 def purge(dir, pattern):
     for f in os.listdir(dir):
@@ -55,12 +48,9 @@ def purge(dir, pattern):
 tmp_work_dir = os.path.realpath(os.curdir)
 os.chdir(os.path.realpath(os.path.dirname(__file__)))
 
-if not os.path.exists("bin"):
-    os.mkdir("bin")
-
 # remove previously compiled lib
 for shared_obj in to_compile: 
-    purge("bin/", shared_obj)
+    purge("./", shared_obj)
 
 ###  compilation  ###
 mods = []
@@ -77,7 +67,6 @@ if name in to_compile:
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args))
-    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_pfdr_d1_lsx_cpy"
@@ -93,7 +82,6 @@ if name in to_compile:
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args))
-    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_kmpp_d0_dist_cpy"
@@ -107,7 +95,6 @@ if name in to_compile:
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args))
-    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
 
 name = "cp_prox_tv_cpy"
@@ -123,9 +110,8 @@ if name in to_compile:
             include_dirs=include_dirs,
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args))
-    #setup(name=name, ext_modules=[mod], cmdclass=dict(build=build_class))
 
-setup(name='cutpursuit', ext_modules=mods,packages=find_packages(),cmdclass=dict(build=build_class))
+setup(name='cutpursuit', ext_modules=mods,packages=find_packages())
 ###  postprocessing  ###
 try:
     shutil.rmtree("build") # remove temporary compilation products
