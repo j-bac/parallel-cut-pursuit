@@ -13,6 +13,7 @@ import numpy
 import shutil # for rmtree, os.rmdir can only remove _empty_ directory
 import os 
 import re
+import platform
 
 ###  targets and compile options  ###
 to_compile = [ # comment undesired extension modules
@@ -23,15 +24,22 @@ to_compile = [ # comment undesired extension modules
 ]
 include_dirs = [numpy.get_include(), # find the Numpy headers
                 "./include"]
+                
 # compilation and linkage options
 # _GLIBCXX_PARALLEL is only useful for libstdc++ users
 # MIN_OPS_PER_THREAD roughly controls parallelization, see doc in README.md
-if os.name == 'nt': # windows
+if platform.system() == 'Windows': # windows
     extra_compile_args = ["/std:c++11", "/openmp", "-D_GLIBCXX_PARALLEL",
                           "-DMIN_OPS_PER_THREAD=10000"]
     extra_link_args = ["/lgomp"]
-elif os.name == 'posix': # linux
+
+elif platform.system() == 'Linux': # linux
     extra_compile_args = ["-std=c++11", "-fopenmp", "-D_GLIBCXX_PARALLEL",
+                          "-DMIN_OPS_PER_THREAD=10000"]
+    extra_link_args = ["-lgomp"]
+
+elif platform.system() == 'Darwin': # Mac
+    extra_compile_args = ["-std=c++11", "-Xpreprocessor", "-fopenmp", "-D_GLIBCXX_PARALLEL",
                           "-DMIN_OPS_PER_THREAD=10000"]
     extra_link_args = ["-lgomp"]
 else:
